@@ -24,7 +24,6 @@ const Home = () => {
   const [activeTab, setActiveTab] = useState('Positions');
   const [amount, setAmount] = useState('');
 
-  // Prepare chart data for trading chart
   const chartValues = tradingData.chart.data.map((point) => point.close);
   const minValue = Math.min(...chartValues);
   const maxValue = Math.max(...chartValues);
@@ -35,14 +34,10 @@ const Home = () => {
   const bottomPadding = 10;
   const usableHeight = chartHeight - topPadding - bottomPadding;
   
-  // Calculate dot position to match exactly where the line ends
-  // react-native-chart-kit uses approximately 15-18px padding on right side
   const chartRightPadding = 15;
   const chartTopPadding = 10;
   const chartBottomPadding = 10;
   const chartUsableHeight = chartHeight - chartTopPadding - chartBottomPadding;
-  // Calculate Y position: chart is inverted (max at top, min at bottom)
-  // Subtract 4 to center the 8px dot (half of dot size)
   const dotYPosition = chartTopPadding + ((maxValue - lastValue) / valueRange) * chartUsableHeight - 4;
   
   const chartData = {
@@ -59,9 +54,9 @@ const Home = () => {
     backgroundGradientFrom: '#000000',
     backgroundGradientTo: '#000000',
     decimalPlaces: 0,
-    color: (opacity = 1) => `rgba(76, 175, 80, 1)`, // Darker, fully opaque green
+    color: (opacity = 1) => `rgba(76, 175, 80, 1)`, 
     labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-    strokeWidth: 3, // Thicker line for darker appearance
+    strokeWidth: 3, 
     propsForDots: {
       r: '4',
       strokeWidth: '2',
@@ -80,8 +75,7 @@ const Home = () => {
   return (      
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#000000" />
-      
-      {/* Header */}
+    
       <View style={styles.header}>
         <View style={styles.headerBottom}>
           <TouchableOpacity>
@@ -101,7 +95,6 @@ const Home = () => {
       </View>
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        {/* Price Section */}
         <View style={styles.priceSection}>
           <Text style={styles.priceText}>
             {formatPrice(tradingData.price.current)}
@@ -119,7 +112,6 @@ const Home = () => {
           </View>
         </View>
 
-        {/* Chart */}
         <View style={styles.chartContainer}>
           <LineChart
             data={chartData}
@@ -138,7 +130,6 @@ const Home = () => {
           />
         </View>
 
-        {/* Timeframe Buttons */}
         <View style={styles.timeframeContainer}>
           {tradingData.timeframes.map((timeframe) => (
             <TouchableOpacity
@@ -159,7 +150,6 @@ const Home = () => {
           ))}
         </View>
 
-        {/* Buy/Sell Buttons and Leverage */}
         <View style={styles.actionButtonsContainer}>
           <View style={styles.buySellContainer}>
             <TouchableOpacity style={styles.buyButton}>
@@ -175,7 +165,6 @@ const Home = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Order Type and Available Balance */}
         <View style={styles.orderTypeContainer}>
           <View style={styles.orderTypeButtons}>
             <TouchableOpacity
@@ -213,7 +202,6 @@ const Home = () => {
           </View>
         </View>
 
-        {/* Amount Input */}
         <View style={styles.amountContainer}>
           <View style={styles.amountInputContainer}>
             <TextInput
@@ -240,7 +228,6 @@ const Home = () => {
           </View>
         </View>
 
-        {/* Tabs */}
         <View style={styles.tabsContainer}>
           <TouchableOpacity
             style={[
@@ -280,7 +267,6 @@ const Home = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Position Card */}
         {tradingData.positions.length > 0 && activeTab === 'Positions' && (
           <View style={styles.positionCard}>
             <View style={styles.positionHeader}>
@@ -337,7 +323,6 @@ const Home = () => {
           </View>
         )}
 
-        {/* Cancel Button */}
         <TouchableOpacity style={styles.cancelButton}>
           <Text style={styles.cancelButtonText}>Cancel</Text>
         </TouchableOpacity>
