@@ -14,13 +14,17 @@ export const tradingData = {
   chart: {
     data: [
       { close: 85000 },
-      { close: 86000 },
-      { close: 87000 },
-      { close: 88000 },
-      { close: 89000 },
-      { close: 89500 },
-      { close: 90000 },
-      { close: 90467.87 },
+      { close: 87000 }, // big up
+      { close: 65000 }, // big down 1
+      { close: 75000 }, // big up
+      { close: 86000 }, // big down 2
+      { close: 90000 }, // big up
+      { close: 77000 }, // big down 3
+      { close: 91000 }, // big up
+      { close: 88000 }, // big down 4
+      { close: 84000 }, // big up
+      { close: 89000 }, // big down 5
+      { close: 89000.87 },
     ],
   },
   timeframes: ['1m', '15m', '1h', '1d', '1w', '1M'],

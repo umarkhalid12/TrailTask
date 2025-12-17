@@ -25,11 +25,31 @@ const Home = () => {
   const [amount, setAmount] = useState('');
 
   // Prepare chart data for trading chart
+  const chartValues = tradingData.chart.data.map((point) => point.close);
+  const minValue = Math.min(...chartValues);
+  const maxValue = Math.max(...chartValues);
+  const valueRange = maxValue - minValue;
+  const lastValue = chartValues[chartValues.length - 1];
+  const chartHeight = 150;
+  const topPadding = 10;
+  const bottomPadding = 10;
+  const usableHeight = chartHeight - topPadding - bottomPadding;
+  
+  // Calculate dot position to match exactly where the line ends
+  // react-native-chart-kit uses approximately 15-18px padding on right side
+  const chartRightPadding = 15;
+  const chartTopPadding = 10;
+  const chartBottomPadding = 10;
+  const chartUsableHeight = chartHeight - chartTopPadding - chartBottomPadding;
+  // Calculate Y position: chart is inverted (max at top, min at bottom)
+  // Subtract 4 to center the 8px dot (half of dot size)
+  const dotYPosition = chartTopPadding + ((maxValue - lastValue) / valueRange) * chartUsableHeight - 4;
+  
   const chartData = {
     labels: tradingData.chart.data.map(() => ''),
     datasets: [
       {
-        data: tradingData.chart.data.map((point) => point.close),
+        data: chartValues,
       },
     ],
   };
@@ -39,12 +59,12 @@ const Home = () => {
     backgroundGradientFrom: '#000000',
     backgroundGradientTo: '#000000',
     decimalPlaces: 0,
-    color: (opacity = 1) => `rgba(76, 175, 80, ${opacity})`,
+    color: (opacity = 1) => `rgba(76, 175, 80, 1)`, // Darker, fully opaque green
     labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-    strokeWidth: 2,
+    strokeWidth: 3, // Thicker line for darker appearance
     propsForDots: {
-      r: '3',
-      strokeWidth: '1',
+      r: '4',
+      strokeWidth: '2',
       stroke: '#4CAF50',
       fill: '#4CAF50',
     },
@@ -107,11 +127,14 @@ const Home = () => {
             height={150}
             chartConfig={chartConfig}
             bezier
-            withDots={true}
+            withDots={false}
             withShadow={false}
             withVerticalLabels={false}
             withHorizontalLabels={false}
+            withInnerLines={false}
+            withOuterLines={false}
             style={styles.chart}
+            fromZero={false}
           />
         </View>
 
@@ -383,16 +406,27 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   chartContainer: {
-    paddingHorizontal: 0,
-    marginHorizontal: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    marginLeft: -30,
+    marginRight: 0,
     marginVertical: 8,
     width: '100%',
-    alignSelf: 'stretch',
+    alignItems: 'flex-start',
   },
   chart: {
     marginVertical: 0,
     marginHorizontal: 0,
     borderRadius: 0,
+  },
+  lastDot: {
+    position: 'absolute',
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#4CAF50',
+    borderWidth: 2,
+    borderColor: '#000000',
   },
   timeframeContainer: {
     flexDirection: 'row',
@@ -405,7 +439,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 6,
     borderRadius: 4,
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#2A2A2A',
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: 3,
@@ -446,7 +480,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   sellButton: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#2A2A2A',
     paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 6,
@@ -477,7 +511,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   orderTypeButtonActive: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#2A2A2A',
   },
   orderTypeText: {
     color: '#666',
@@ -541,7 +575,7 @@ const styles = StyleSheet.create({
   amountInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#2A2A2A',
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -604,7 +638,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   positionCard: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#2A2A2A',
     marginHorizontal: 16,
     marginVertical: 10,
     borderRadius: 10,
